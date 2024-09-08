@@ -6,7 +6,7 @@
 {-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE PolyKinds #-}
 {-# LANGUAGE QuantifiedConstraints #-}
-{-# LANGUAGE Safe #-}
+{-# LANGUAGE Trustworthy #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE TypeOperators #-}
 
@@ -94,7 +94,6 @@ module Control.DeepSeq (
 import Control.Applicative
 import Control.Concurrent (MVar, ThreadId)
 import Control.Exception (MaskingState (..))
-import Data.Array
 import Data.Complex
 import Data.Fixed
 import Data.Functor.Compose
@@ -118,6 +117,8 @@ import Data.Void (Void, absurd)
 import Data.Word
 import Foreign.C.Types
 import Foreign.Ptr
+import GHC.Arr (Array)
+import qualified GHC.Arr
 import GHC.Fingerprint.Type (Fingerprint (..))
 import GHC.Generics
 import GHC.Stack.Types (CallStack (..), SrcLoc (..))
@@ -628,15 +629,16 @@ instance NFData2 Const where
 -- We should use MIN_VERSION array(0,5,1,1) but that's not possible.
 -- There isn't an underscore to not break C preprocessor
 instance (NFData a, NFData b) => NFData (Array a b) where
-  rnf x = rnf (bounds x, Data.Array.elems x)
+  rnf x = rnf (GHC.Arr.bounds x, GHC.Arr.elems x)
 
 -- | @since 1.4.3.0
 instance (NFData a) => NFData1 (Array a) where
-  liftRnf r x = rnf (bounds x) `seq` liftRnf r (Data.Array.elems x)
+  liftRnf r x = rnf (GHC.Arr.bounds x) `seq` liftRnf r (GHC.Arr.elems x)
 
 -- | @since 1.4.3.0
 instance NFData2 Array where
-  liftRnf2 r r' x = liftRnf2 r r (bounds x) `seq` liftRnf r' (Data.Array.elems x)
+  liftRnf2 r r' x =
+    liftRnf2 r r (GHC.Arr.bounds x) `seq` liftRnf r' (GHC.Arr.elems x)
 
 -- | @since 1.4.0.0
 instance NFData a => NFData (Down a) where rnf = rnf1
