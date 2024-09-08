@@ -2,9 +2,14 @@
 
 ## Upcoming
 
+
+
+## 1.6.0.0
+
   * Add Unit monoid with `seq`
     ([#18](https://github.com/haskell/deepseq/issues/18), [#105](https://github.com/haskell/deepseq/issues/105))
-
+  * Drop the dependency on `array`
+    ([#102](https://github.com/haskell/deepseq/issues/102), [#107](https://github.com/haskell/deepseq/issues/107))
 
 ## 1.5.0.0
 
