@@ -4,7 +4,7 @@
 
 
 
-## 1.6.0.0
+## 1.5.1.0
 
   * Add Unit monoid with `seq`
     ([#18](https://github.com/haskell/deepseq/issues/18), [#105](https://github.com/haskell/deepseq/issues/105))
